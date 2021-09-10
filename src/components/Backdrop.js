@@ -12,14 +12,6 @@ export default class Backdrop extends Lightning.Component {
             ImgSource: {
                 x: -299.5, w: 300, h: 168
             },
-            // Radial: {
-            //     w: w => w,
-            //     h: h => h,
-            //     rect: true,
-            //     shader: {
-            //         type: Lightning.shaders.RadialGradient, radius: 1200, innerColor: Colors('background').darker(0.1).get(), outerColor:  Colors('white').alpha(0).get(), pivot: [0.65, 0.9]
-            //     }
-            // },
             Swirl: {
                 rect: true, w: 1920, h: 1080,
                 src: Utils.asset('images/swirlBackground.jpg'),
@@ -82,7 +74,7 @@ export default class Backdrop extends Lightning.Component {
         }
         this._debounce = setTimeout(() => {
             this._loadTextures(this._targetSrc);
-        }, 300);
+        }, 100);
     }
 
     _loadTextures(src) {
