@@ -14,6 +14,18 @@ const routes = [
                 })
         },
         widgets: ['menu']
+    },
+    {
+        path: 'movies',
+        component: Main,
+        on: async (page) => {
+            getHomePage()
+                .then((response) => {
+                    page.addStrips(createPageComponents(response));
+                    return true
+                })
+        },
+        widgets: ['menu']
     }
 ]
 

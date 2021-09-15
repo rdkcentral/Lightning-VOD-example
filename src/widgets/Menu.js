@@ -1,4 +1,4 @@
-import { Colors, Lightning, Utils } from "@lightningjs/sdk";
+import { Colors, Img, Lightning, Router, Utils } from "@lightningjs/sdk";
 import { List } from "@lightningjs/ui";
 import { transition, animation } from "../lib/helpers";
 
@@ -26,9 +26,11 @@ export default class Menu extends Lightning.Component {
                     type: Lightning.shaders.RadialGradient, radius: 70, innerColor: Colors('black').alpha(0.8).get(), outerColor:  Colors('white').alpha(0).get(), pivotX: 0, pivotY: 0.5
                 }
             },
-            Blur: {
-                w: 140, h: 1080, zIndex: 9, type: Lightning.components.FastBlurComponent, amount: 3, content: {
-                    MirrorContent: {color: Colors('white').darker(0.4).get()}
+            Background: {
+                FastBlur: {
+                    w: 140, h: 1080, zIndex: 9, type: Lightning.components.FastBlurComponent, amount: 3, content: {
+                        MirrorContent: {color: Colors('white').darker(0.4).get()}
+                    }
                 }
             },
             Focus: {
@@ -41,20 +43,21 @@ export default class Menu extends Lightning.Component {
                 }
             },
             List: {
-                zIndex: 10, direction: 'column', y: 230, x: 20, w: 140, h: 620, type: List, signals: { onIndexChanged: true }
+                zIndex: 10, forceLoad: true, direction: 'column', y: 230, x: 20, w: 140, h: 620, type: List, signals: { onIndexChanged: true }
             }
         }
     }
 
     _blurContent() {
-        const mirror = this.tag('Blur').content.tag('MirrorContent');
+        const mirror = this.tag('FastBlur').content.tag('MirrorContent');
         mirror.texture = this.fireAncestors('$getAppContentTexture');
         mirror.texture.enableClipping(0, 0, 140, 1080);
     }
 
     _setup() {
-        const items = ['Search', 'Home', 'Movies', 'Series', 'Close'].map((item) => {
-            return { type: MenuItem, item };
+        this._items = ['search', 'home', 'movies', 'series', 'close'];
+        const items = this._items.map((item) => {
+            return { type: MenuItem, item, selected: false };
         });
         this.tag('List').add(items);
         this._blurContent();
@@ -78,7 +81,7 @@ export default class Menu extends Lightning.Component {
         this._focusMenuAnimation = this.animation({duration: 0.3, actions: [
             {t: 'Focus.Lighting', p: 'shader.innerColor', v: {0: Colors('white').get(), 1: Colors('focus').get()}},
             {t: 'Focus.Lighting', p: 'shader.outerColor', v: {0: Colors('white').get(), 1: Colors('focus2').get()}},
-            {t: 'RadialShadow', p: 'shader.radius', v: {0: 70, 1: 1200}}
+            {t: 'RadialShadow', p: 'shader.radius', v: {0: 70, 1: 1400}}
         ]});
     }
 
@@ -153,6 +156,21 @@ export default class Menu extends Lightning.Component {
         return this.tag('List');
     }
 
+    _onActivated(page) {
+        const list = this.tag('List');
+        const currentRouteIndex = this._items.indexOf(page[Router.symbols['route']]);
+
+        list.items.forEach((item, index) => {
+            item.selected = index === currentRouteIndex;
+        });
+
+        if(!this.active) {
+            list.setIndex(currentRouteIndex);
+            transition(this._focusTransitionY, Menu.focusDefaultPosition + 130 * currentRouteIndex, 1);
+            this._focusTransitionY.finish();
+        }
+    }
+
     static get focusDefaultPosition() {
         return 230;
     }
@@ -168,18 +186,18 @@ class MenuItem extends Lightning.Component {
     }
 
     _init() {
-        this._focusAnimation = this.animation({duration: 0.2, actions: [
-            {p: 'alpha', v: {0: 0.8, 1: 1}},
-            {t: 'Label', p: 'alpha', v: {0: 0, 1: 1}},
-            {t: 'Label', p: 'x', v: {0: 190, 1: 170}}
-        ]})
+        this._updateFocusAnimation();
     }
 
     _firstActive() {
         this.patch({
-            Icon: {src: Utils.asset(`images/${this.item.toLowerCase()}.png`)},
-            Label: {text: this.item}
-        })
+            Icon: {src: Utils.asset(`images/${this.item}.png`)},
+            Label: {text: this.item.charAt(0).toUpperCase() + this.item.slice(1)}
+        });
+    }
+
+    _handleEnter() {
+        Router.navigate(this.item.toLowerCase());
     }
 
     _focus() {
@@ -187,7 +205,30 @@ class MenuItem extends Lightning.Component {
     }
 
     _unfocus() {
+        console.log('unfocus()')
         this._focusAnimation.stop();
+    }
+
+    _updateFocusAnimation(bool = this._selected) {
+        if(this._focusAnimation && this._focusAnimation.isActive()) {
+            this._focusAnimation.stopNow();
+        }
+
+        this._focusAnimation = this.animation({duration: 0.2, actions: [
+            {p: 'alpha', v: {0: bool ? 1 : 0.8, 1: 1}},
+            {t: 'Label', p: 'alpha', v: {0: 0, 1: 1}},
+            {t: 'Label', p: 'x', v: {0: 190, 1: 170}}
+        ]});
+    }
+
+    set selected(bool) {
+        this._updateFocusAnimation(bool);
+        this.alpha = bool ? 1 : 0.8;
+        this._selected = bool;
+    }
+
+    get selected() {
+        return this._selected;
     }
 
     static get marginBottom() {

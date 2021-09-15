@@ -17,6 +17,9 @@ export default class Main extends Lightning.Component {
     }
 
     $updateItemTitle(e) {
+        if(this._currentItem && this._currentItem.title === e.title) {
+            return;
+        }
         this._currentItem = e;
         this._updateItemDetails();
     }

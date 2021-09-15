@@ -34,8 +34,13 @@ export default class Strip extends Lightning.Component {
     }
 
     _unfocus() {
-        const index = this.cparent.componentIndex;
+        if(!this.cparent) {
+            return;
+        }
+
         const parentIndex = this.collectionWrapper.index;
+        const index = this.cparent.componentIndex;
+
         if(index !== parentIndex) {
             this.tag('List').setIndex(0);
         }

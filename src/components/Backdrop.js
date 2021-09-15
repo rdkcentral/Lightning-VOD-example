@@ -18,14 +18,14 @@ export default class Backdrop extends Lightning.Component {
                 shader: {type: Swirl, blur: 0.005, pull: 14}
             },
             Backdrop: {
-                alpha: 0.001, w: w => w, h: 740, shader: {type: Lightning.shaders.FadeOut, fade: [0, 700, 900, 0]}, transitions: {alpha: {duration: 1}},
+                alpha: 1, w: w => w, color: 0xff000000, h: 740, shader: {type: Lightning.shaders.FadeOut, fade: [0, 700, 900, 0]}, transitions: {alpha: {duration: 1}},
             },
         }
     }
 
     _init() {
         const backdrop = this.tag('Backdrop');
-        this._transitionAlpha = backdrop.transition('alpha');
+        this._transitionAlpha = backdrop.transition('color');
         this.tag('Backdrop').on('txLoaded', (texture) => {
             if(this._backdrop.src === texture.src) {
                 this._backdropLoaded = true;
@@ -39,7 +39,7 @@ export default class Backdrop extends Lightning.Component {
             }
         });
         this._transitionAlpha.on('finish', () => {
-            if(backdrop.alpha === 0.001) {
+            if(backdrop.color === 0xff000000) {
                 this._loadSrc();
             }
         });
@@ -65,7 +65,7 @@ export default class Backdrop extends Lightning.Component {
         }
         this._backdropLoaded = false;
         this._imgSrcLoaded = false;
-        transition(this._transitionAlpha, 1);
+        transition(this._transitionAlpha, 0xffffffff);
     }
 
     _loadSrc() {
@@ -74,7 +74,7 @@ export default class Backdrop extends Lightning.Component {
         }
         this._debounce = setTimeout(() => {
             this._loadTextures(this._targetSrc);
-        }, 100);
+        }, 50);
     }
 
     _loadTextures(src) {
@@ -83,18 +83,17 @@ export default class Backdrop extends Lightning.Component {
 
         this.tag('ImgSource').texture = this._imgSource;
         this.tag('Backdrop').texture = this._backdrop;
-        
     }
     
     update(src) {
         if(src === this._targetSrc) {
             return;
         }
-        if(this.tag('Backdrop').alpha === 0.001) {
+        if(this.tag('Backdrop').color === 0xff000000) {
             this._loadTextures(src);
         }
         else {
-            transition(this._transitionAlpha, 0.001);
+            transition(this._transitionAlpha, 0xff000000);
         }
         this._targetSrc = src;
     }
