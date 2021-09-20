@@ -163,9 +163,8 @@ export default class Menu extends Lightning.Component {
         list.items.forEach((item, index) => {
             item.selected = index === currentRouteIndex;
         });
-
+        list.setIndex(currentRouteIndex);
         if(!this.active) {
-            list.setIndex(currentRouteIndex);
             transition(this._focusTransitionY, Menu.focusDefaultPosition + 130 * currentRouteIndex, 1);
             this._focusTransitionY.finish();
         }
@@ -181,7 +180,7 @@ class MenuItem extends Lightning.Component {
         return {
             alpha: 0.8,
             Icon: { scale: 0.7 },
-            Label: {alpha: 0, x: 170, y: 50, mountY: 0.45, text: {fontFace: 'Medium', fontSize: 58}}
+            Label: {alpha: 0, x: 170, y: 50, mountY: 0.43, text: {fontFace: 'Medium', fontSize: 56}}
         }
     }
 
@@ -205,7 +204,6 @@ class MenuItem extends Lightning.Component {
     }
 
     _unfocus() {
-        console.log('unfocus()')
         this._focusAnimation.stop();
     }
 

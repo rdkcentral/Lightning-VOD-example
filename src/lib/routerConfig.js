@@ -1,5 +1,5 @@
 import { Main } from "../pages";
-import { getHomePage } from "./api.js";
+import { getHomePage, getMoviesPage, getSeriesPage } from "./api.js";
 import { createPageComponents } from "./Factory.js";
 
 const routes = [
@@ -10,7 +10,7 @@ const routes = [
             getHomePage()
                 .then((response) => {
                     page.addStrips(createPageComponents(response));
-                    return true
+                    return true;
                 })
         },
         widgets: ['menu']
@@ -19,10 +19,22 @@ const routes = [
         path: 'movies',
         component: Main,
         on: async (page) => {
-            getHomePage()
+            getMoviesPage()
                 .then((response) => {
                     page.addStrips(createPageComponents(response));
-                    return true
+                    return true;
+                })
+        },
+        widgets: ['menu']
+    },
+    {
+        path: 'series',
+        component: Main,
+        on: async (page) => {
+            getSeriesPage()
+                .then((response) => {
+                    page.addStrips(createPageComponents(response));
+                    return true;
                 })
         },
         widgets: ['menu']

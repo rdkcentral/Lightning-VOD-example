@@ -5,7 +5,7 @@ import { transition } from '../lib/helpers';
 export default class Strip extends Lightning.Component {
     static _template() {
         return {
-            transitions: {alpha: {duration: 0.25}},
+            alpha: 0.001, transitions: {alpha: {duration: 0.25}},
             Label: {x: 90, y: 0, pivotX: 0, pivotY: 1, scale: 0.8, text: {fontFace: 'Medium', fontSize: 48}},
             List: {
                 y: 80, x: 90, type: List, w: 1600, spacing: 40
@@ -24,7 +24,10 @@ export default class Strip extends Lightning.Component {
     }
 
     _firstActive() {
+        const parentIndex = this.collectionWrapper.index;
+        const index = this.cparent.componentIndex;
         this.patch({
+            alpha: index >= parentIndex,
             Label: {text: {text: this.title}},
             List: {
                 itemType: this.itemType, items: this.items

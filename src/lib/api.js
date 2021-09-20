@@ -85,15 +85,16 @@ export const postRequest = (obj) => {
     return _request({...obj, method: 'POST'});
 };
 
-const _fetchPageData = (lists) => {
+const _fetchPageData = (lists, itemParams = {}) => {
     const calls = lists.map(({path, params}) => {
         return getRequest({target: path, params})
     });
     return Promise.all(calls)
         .then((response) => {
             return response.map((list, index) => {
-                return {title: lists[index].title, items: list.results}
-            });
+                return {title: lists[index].title, ...itemParams, items: list.results}
+            })
+            .filter((strip) => strip.items.length > 0);
         });
 }
 
@@ -102,4 +103,70 @@ export const getHomePage = () => {
         {path: 'trending/all/day', title: 'Trending Today'},
         {path: 'trending/all/week', title: 'Trending this Week'},
     ]);
+}
+
+export const getMoviesPage = () => {
+    const currentDate = new Date();
+    const futureDate = _futureDate(currentDate);
+    const pastDate = _pastDate(currentDate);
+    return _fetchPageData([
+        {path: 'discover/movie', title: 'Most Popular'},
+        {path: 'discover/movie', params: {sort_by: 'vote_count.desc'}, title: 'Top Rated'},
+        {path: 'discover/movie', params: {with_watch_monetization_types: 'free'}, title: 'Free to Watch'},
+        {path: 'discover/movie', params: {'release_date.gte': futureDate.gte, 'release_date.lte': futureDate.lte, 'with_release_type': 3}, title: 'Upcoming'},
+        {path: 'discover/movie', params: {'release_date.gte': pastDate.gte, 'release_date.lte': pastDate.lte, 'with_release_type': 3}, title: 'In Theaters'},
+    ], {media_type: 'movie'});
+}
+
+export const getSeriesPage = () => {
+    const currentDate = new Date();
+    const formatCurrentDate = `${_nomalizeDatePart(currentDate.getDay())}-${_nomalizeDatePart(currentDate.getMonth() + 1)}-${currentDate.getFullYear()}`;
+    return _fetchPageData([
+        {path: 'discover/tv', title: 'Most Popular'},
+        {path: 'discover/tv', params: {sort_by: 'vote_count.desc'}, title: 'Top Rated'},
+        {path: 'discover/tv', params: {'release_date.gte': formatCurrentDate, 'release_date.lte': formatCurrentDate}, title: 'Airing Today'}
+    ], {media_type: 'tv'});
+}
+
+const _futureDate = (date) => {
+    const currentYear = date.getFullYear();
+    const currentMonth = date.getMonth();
+    const currentDay = date.getDay();
+
+    let futureMonth = currentMonth + 1;
+    let futureYear = currentYear;
+    if(futureMonth > 11) {
+        futureMonth = 0;
+        futureYear = currentYear + 1;
+    }
+    return {
+        gte: `${_nomalizeDatePart(currentYear)}-${_nomalizeDatePart(currentMonth + 1)}-${currentDay < 22 ? 22 : currentDay}`,
+        lte: `${_nomalizeDatePart(futureYear)}-${_nomalizeDatePart(futureMonth + 1)}-14`
+    }
+}
+
+const _pastDate = (date) => {
+    const currentYear = date.getFullYear();
+    const currentMonth = date.getMonth();
+    const currentDay = date.getDay();
+
+    let pastMonth = currentMonth - 1;
+    let pastYear = currentYear;
+    const pastDay = Math.min(28, currentDay);
+
+    if(pastMonth < 0) {
+        pastMonth = 11;
+        pastYear = currentYear - 1;
+    }
+    return {
+        lte: `${_nomalizeDatePart(currentYear)}-${_nomalizeDatePart(currentMonth)}-${currentDay}`,
+        gte: `${_nomalizeDatePart(pastYear)}-${_nomalizeDatePart(pastMonth)}-${pastDay}`
+    }
+}
+
+const _nomalizeDatePart = (num) => {
+    if((num + '').length === 1) {
+        return '0' + num;
+    }
+    return num;
 }
