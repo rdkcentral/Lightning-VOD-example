@@ -34,10 +34,18 @@ export default class Item extends Lightning.Component {
     }
 
     static get width() {
-        return 185
+        return 185;
     }
 
     static get height() {
-        return 278
+        return 278;
+    }
+
+    static get marginRight() {
+        return 40;
+    }
+
+    static get marginBottom() {
+        return 40;
     }
 }

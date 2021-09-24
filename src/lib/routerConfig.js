@@ -1,6 +1,7 @@
-import { Main } from "../pages";
-import { getHomePage, getMoviesPage, getSeriesPage } from "./api.js";
-import { createPageComponents } from "./Factory.js";
+import { Item } from "../components";
+import { Main, Search } from "../pages";
+import { getHomePage, getMoviesPage, getSearchResults, getSeriesPage } from "./api.js";
+import { createItemCollection, createPageComponents } from "./Factory.js";
 
 const routes = [
     {
@@ -38,6 +39,21 @@ const routes = [
                 })
         },
         widgets: ['menu']
+    },
+    {
+        path: 'search',
+        component: Search,
+        widgets: ['inputfield'],
+        before: async (page) => {
+            page.tag('Grid').itemType = Item;
+            page.onSearch = async (input) => {
+                return getSearchResults(input)
+                    .then((response) => {
+                        return createItemCollection(response);
+                    });
+            }
+            return true;
+        }
     }
 ]
 

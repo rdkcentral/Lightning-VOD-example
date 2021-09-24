@@ -85,7 +85,7 @@ export default class Menu extends Lightning.Component {
         ]});
     }
 
-    onIndexChanged({ previousIndex, index }) {
+    onIndexChanged({ previousIndex = this.tag('List').index, index = this._selectedIndex }) {
         if (this.active && previousIndex !== index) {
             this._navigatingDirection = (previousIndex < index ? 1 : -1);
             const focus = this.tag('Focus')
@@ -150,6 +150,9 @@ export default class Menu extends Lightning.Component {
 
     _unfocus() {
         this._focusMenuAnimation.stop();
+        if(!Router.isNavigating()) {
+            this.tag('List').setIndex(this._selectedIndex);
+        }
     }
 
     _getFocused() {
@@ -158,7 +161,7 @@ export default class Menu extends Lightning.Component {
 
     _onActivated(page) {
         const list = this.tag('List');
-        const currentRouteIndex = this._items.indexOf(page[Router.symbols['route']]);
+        const currentRouteIndex = this._selectedIndex = this._items.indexOf(page[Router.symbols['route']]);
 
         list.items.forEach((item, index) => {
             item.selected = index === currentRouteIndex;

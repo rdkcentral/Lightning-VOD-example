@@ -1,31 +1,27 @@
-import { Lightning, Img, Colors, Utils } from '@lightningjs/sdk';
-import { transition, animation, extractCommonColor } from '../lib/helpers';
-import Swirl from '../shaders/Swirl.js';
+import { Lightning, Img, Colors } from '@lightningjs/sdk';
+import { transition, extractCommonColor } from '../lib/helpers';
 
 export default class Backdrop extends Lightning.Component {
     static _template() {
         return {
             w: 1920,
             h: 1080,
-            rect: true,
-            color: Colors('background').get(),
             ImgSource: {
                 x: -299.5, w: 300, h: 168
             },
-            Swirl: {
-                rect: true, w: 1920, h: 1080,
-                src: Utils.asset('images/swirlBackground.jpg'),
-                shader: {type: Swirl, blur: 0.005, pull: 14}
-            },
             Backdrop: {
-                alpha: 1, w: w => w, color: 0xff000000, h: 740, shader: {type: Lightning.shaders.FadeOut, fade: [0, 700, 900, 0]}, transitions: {alpha: {duration: 1}},
-            },
+                alpha: 1, w: w => w, h: 740, shader: {type: Lightning.shaders.FadeOut, fade: [0, 700, 900, 0]}, transitions: {alpha: {duration: 1}},
+            }
         }
+    }
+
+    _construct() {
+        this._targetSrc = null;
     }
 
     _init() {
         const backdrop = this.tag('Backdrop');
-        this._transitionAlpha = backdrop.transition('color');
+        this._transitionAlpha = backdrop.transition('alpha');
         this.tag('Backdrop').on('txLoaded', (texture) => {
             if(this._backdrop.src === texture.src) {
                 this._backdropLoaded = true;
@@ -39,7 +35,7 @@ export default class Backdrop extends Lightning.Component {
             }
         });
         this._transitionAlpha.on('finish', () => {
-            if(backdrop.color === 0xff000000) {
+            if(backdrop.alpha === 0.001) {
                 this._loadSrc();
             }
         });
@@ -52,16 +48,8 @@ export default class Backdrop extends Lightning.Component {
         }
         
         if(this.stage.gl) {
-            const color = extractCommonColor(this._imgSrcLoaded, this.stage.gl);
-            const prevColor = this._baseColor;
-            this._baseColor = color;
-
-            this._colorAnim = animation(this._colorAnim, 'Swirl', this, {
-                duration: 1, actions: [
-                    {p: 'colorTop', v: {0: Colors(prevColor).darker(0.2), 1: Colors(color).darker(0.2)}},
-                    {p: 'colorBottom', v: {0: prevColor, 1: color}}
-                ]
-            })
+            const color = this._extractedColor = extractCommonColor(this._imgSrcLoaded, this.stage.gl);
+            this.fireAncestors('$updateAmbientBackground', {color});
         }
         this._backdropLoaded = false;
         this._imgSrcLoaded = false;
@@ -87,13 +75,15 @@ export default class Backdrop extends Lightning.Component {
     
     update(src) {
         if(src === this._targetSrc) {
+            this.fireAncestors('$updateAmbientBackground', {color: this._extractedColor});
             return;
         }
-        if(this.tag('Backdrop').color === 0xff000000) {
+        this.setSmooth('alpha', !!(src !== null));
+        if(this.tag('Backdrop').alpha === 0.001) {
             this._loadTextures(src);
         }
         else {
-            transition(this._transitionAlpha, 0xff000000);
+            transition(this._transitionAlpha, 0.001);
         }
         this._targetSrc = src;
     }

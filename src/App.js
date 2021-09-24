@@ -17,10 +17,10 @@
  * limitations under the License.
  */
 
-import { Lightning, Utils, Router, Colors } from '@lightningjs/sdk';
-import { Menu } from './widgets';
+import { Utils, Router } from '@lightningjs/sdk';
+import { Menu, InputField } from './widgets';
 import routerConfig from './lib/routerConfig.js';
-import { Backdrop } from './components';
+import { Backdrop, AmbientBackground } from './components';
 
 export default class App extends Router.App{
   static getFonts() {
@@ -34,6 +34,7 @@ export default class App extends Router.App{
   static _template() {
     return {
       Content: { zIndex: 1, rtt: true, w: 1920, h: 1080,
+        AmbientBackground: {type: AmbientBackground},
         Backdrop: {type: Backdrop},
         Pages: {
           forceZIndexContext: true
@@ -45,6 +46,9 @@ export default class App extends Router.App{
       Widgets: {
         Menu: {
           type: Menu, visible: true
+        },
+        InputField: {
+          type: InputField, visible: true
         }
       }
     }
@@ -56,6 +60,10 @@ export default class App extends Router.App{
 
   $updateBackdrop(e) {
     this.tag('Backdrop').update(e.src);
+  }
+
+  $updateAmbientBackground(e) {
+    this.tag('AmbientBackground').update(e.color);
   }
 
   _setup() {

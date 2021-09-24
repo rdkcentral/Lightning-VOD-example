@@ -3,6 +3,6 @@
   "description": "VOD Example",
   "dependencies": {
     "@lightningjs/sdk": "^4.6.1",
-    "@lightningjs/ui": "^1.0.9"
+    "@lightningjs/ui": "^1.0.10"
   }
 }

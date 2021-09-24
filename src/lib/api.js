@@ -98,6 +98,13 @@ const _fetchPageData = (lists, itemParams = {}) => {
         });
 }
 
+export const getSearchResults = (query) => {
+    return getRequest({target: 'search/multi', params: {query, region: 'NL'}})
+        .then((response) => {
+            return response.results;
+        })
+}
+
 export const getHomePage = () => {
     return _fetchPageData([
         {path: 'trending/all/day', title: 'Trending Today'},
