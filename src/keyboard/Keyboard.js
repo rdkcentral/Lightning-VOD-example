@@ -80,7 +80,7 @@ export default class Keyboard extends Lightning.Component {
                 rowHeight = h > rowHeight ? h : rowHeight;
                 const currentPosition = keyPosition + marginLeft;
                 keyPosition += marginLeft + w + marginRight;
-                return {ref: `Key-{${keyIndex + 1}}`, type: KeyWrapper, x: currentPosition, w, h, key: {origin, key, label, action, w, h, ...keyType}}
+                return {ref: `Key-{${keyIndex + 1}}`, type: KeyWrapper, keyboard: this, x: currentPosition, w, h, key: {origin, key, label, action, w, h, ...keyType}}
             });
 
             let rowOffset = x + (marginLeft || margin);
