@@ -13,7 +13,7 @@ export const transition = (target, value, resetDur = 0.3) => {
 
 export const animation = (animation, target, scope, settings) => {
     if(animation) {
-        animation.stopNow();
+        animation.pause();
     }
     animation = scope.tag(target).animation(settings);
     animation.start();

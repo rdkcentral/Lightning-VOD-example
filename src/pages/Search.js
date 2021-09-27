@@ -10,21 +10,20 @@ export default class Search extends Lightning.Component {
         return {
             ItemDescription: { x: 230, y: 90, type: ItemDescription },
             Keyboard: {mountX: 0.5, y: 330, x: 960, w: 935, type: Keyboard, currentLayout: 'ABC', config: keyboardConfig, signals: {onInputChanged: true}},
-            Grid: {y: 90, mountX: 0.5, x: 960, type: SearchGrid, w: 1535, h: 1080, columns: 7, scroll: 640, scrollTransition: {duration: 0.4}}
+            Grid: {alpha: 0.001, y: 90, mountX: 0.5, x: 960, type: SearchGrid, w: 1535, h: 1080, columns: 7, scroll: 640, scrollTransition: {duration: 0.4}}
         }
     }
 
     onInputChanged({input}) {
-        if(this.onSearch && this.onSearch.apply && this.onSearch.call) {
-            this.onSearch(input)
-                .then((response) => {
-                    const grid = this.tag('Grid');
-                    grid.clear();
-                    if(response.length > 0) {
-                        grid.add(response);
-                    }
-                });
+        const grid = this.tag('Grid');
+        grid.setSmooth('alpha', 0.001);
+        if(input.length === 0) {
+            this._clearSearchTimeout();
         }
+        else {
+            this._startSearchTimeout();
+        }
+        this._input = input;
     }
 
     $updateItemTitle(e) {
@@ -33,15 +32,51 @@ export default class Search extends Lightning.Component {
 
     _setup() {
         this.tag('Keyboard').inputField(this.widgets.inputfield)
+
+        
     }
 
     _firstActive() {
         this._setState('Keyboard')
+        this.tag('Keyboard').focus('onSpace');
+    }
+
+    _startSearchTimeout() {
+        this._clearSearchTimeout();
+        this._searchTimeout = setTimeout(() => {
+            this._doSearch();
+        }, 600);
+    }
+
+    _clearSearchTimeout() {
+        if(this._searchTimeout) {
+            clearTimeout(this._searchTimeout);
+        }
+    }
+
+    _doSearch() {
+        if(this.onSearch && this.onSearch.apply && this.onSearch.call) {
+            this.onSearch(this._input)
+                .then((response) => {
+                    const grid = this.tag('Grid');
+                    grid.clear();
+                    if(response.length > 0) {
+                        grid.add(response);
+                        grid.setSmooth('alpha', 1, {delay: 0.2});
+                    }
+                });
+        }
     }
 
     _init() {
-        this._focusTransitionY = this.tag('Grid').transition('y');
-        this._hideKeyboard = this.tag('Keyboard').animation({duration: 0.2, actions: [
+        const grid = this.tag('Grid');
+        this._focusTransitionY = grid.transition('y');
+        grid.transition('alpha').on('finish', () => {
+            if(grid.alpha === 0.001 && this._input.length === 0) {
+                grid.clear();
+            }
+        })
+        this._hideKeyboard = this.tag('Keyboard').animation({duration: 0.4, timingFunction: 'ease', actions: [
             {p: 'x', v: {0: 960, 1: 1960}},
             {p: 'alpha', v: {0: 1, 1: 0}},
         ]});

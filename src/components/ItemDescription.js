@@ -40,6 +40,6 @@ export default class ItemDescription extends Lightning.Component {
     }
 
     hide() {
-        this.alpha = 0.001;
+        this._fadeAnimation.stopNow();
     }
 }

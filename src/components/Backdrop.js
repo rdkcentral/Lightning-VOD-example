@@ -10,7 +10,7 @@ export default class Backdrop extends Lightning.Component {
                 x: -299.5, w: 300, h: 168
             },
             Backdrop: {
-                alpha: 1, w: w => w, h: 740, shader: {type: Lightning.shaders.FadeOut, fade: [0, 700, 900, 0]}, transitions: {alpha: {duration: 1}},
+                alpha: 0.001, w: w => w, h: 740, shader: {type: Lightning.shaders.FadeOut, fade: [0, 700, 900, 0]}, transitions: {alpha: {duration: 1}},
             }
         }
     }
@@ -53,7 +53,7 @@ export default class Backdrop extends Lightning.Component {
         }
         this._backdropLoaded = false;
         this._imgSrcLoaded = false;
-        transition(this._transitionAlpha, 0xffffffff);
+        transition(this._transitionAlpha, 1);
     }
 
     _loadSrc() {

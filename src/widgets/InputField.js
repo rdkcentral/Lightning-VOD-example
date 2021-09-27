@@ -21,7 +21,7 @@ export default class InputField extends Lightning.Component {
                 },
                 Labels: {
                     Icon: {x: 70, y: 70, mount: 0.5, zIndex: 10, src: Utils.asset(`images/search.png`)},
-                    Input: {alpha: 0.8, x: 140, y: 70, mountY: 0.45, zIndex: 10, text: {text: 'Search...', fontFace: 'Regular', fontSize: 54}}
+                    Input: {alpha: 0.8, x: 140, y: 70, mountY: 0.43, zIndex: 10, text: {text: 'Search...', fontFace: 'Regular', fontSize: 54}}
                 }
             }
         }
@@ -38,6 +38,7 @@ export default class InputField extends Lightning.Component {
 
     _init() {
         this._transitionPosition = this.transition('positionX');
+        this._transitionPosition.settings.duration = 0.4;
     }
 
     onInputChanged({input = ''}) {

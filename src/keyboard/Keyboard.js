@@ -130,6 +130,39 @@ export default class Keyboard extends Lightning.Component {
         return this.navigate('column', 1);
     }
 
+    _handleKey({key, code = 'CustomKey'}) {
+        if(code === 'Backspace' && this._input.length === 0) {
+            return false;
+        }
+        if(key === ' ') {
+            key = 'Space';
+        }
+        if(key.length > 1) {
+            key = 'on' + key;
+        }
+        const targetFound = this._findKey(key);
+        if(targetFound) {
+            this._handleEnter();
+        }
+        return targetFound;
+    }
+
+    _findKey(str) {
+        const rows = this._config.layouts[this._layout];
+        let i = 0, j = 0;
+        for(; i < rows.length; i++) {
+            for (j = 0; j < rows[i].length; j++) {
+                let key = rows[i][j];
+                if((str.length > 1 && key.indexOf(str) > -1) || key.toUpperCase() === str.toUpperCase()) {
+                    this._rowIndex = i;
+                    this._columnIndex = j;
+                    return true; 
+                }
+            }
+        }
+        return false;
+    }
+
     _handleEnter() {
         const event = {
             index: this._input.length,
@@ -161,6 +194,10 @@ export default class Keyboard extends Lightning.Component {
             this._inputField.onInputChanged(eventData);
         }
         this.signal('onInputChanged', eventData);
+    }
+
+    focus(str) {
+        this._findKey(str);
     }
 
     add(str) {
@@ -270,7 +307,7 @@ export default class Keyboard extends Lightning.Component {
         this.addAt(' ', index);
     }
 
-    onDelete({index}) {
+    onBackspace({index}) {
         this.removeAt(index);
     }
 

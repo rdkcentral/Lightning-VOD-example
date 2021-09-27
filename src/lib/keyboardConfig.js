@@ -5,11 +5,11 @@ export default keyboardConfig = {
         'ABC': [
             ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'],
             ['K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T'], 
-            ['onLayout:123', 'U', 'V', 'W', 'X', 'Y', 'Z', 'onSpace:_', 'onDelete:<']
+            ['onLayout:123', 'U', 'V', 'W', 'X', 'Y', 'Z', 'onSpace', 'onBackspace']
         ],
         '123': [
             ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'],
-            ['onLayout:ABC', 'onSpace:_', 'onDelete']
+            ['onLayout:ABC', 'onSpace', 'onBackspace']
         ]
     },
     offsets: {
@@ -24,7 +24,7 @@ export default keyboardConfig = {
         onLayout: {
             type: Key, w: 110,
         },
-        onDelete: {
+        onBackspace: {
             type: IconKey, icon: '/images/backspace.png'
         },
         onSpace: {
