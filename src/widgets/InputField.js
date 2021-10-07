@@ -1,5 +1,7 @@
 import { Lightning, Colors, Utils } from "@lightningjs/sdk";
 import { transition } from "../lib/helpers";
+import { InputField as Input } from "@lightningjs/ui";
+
 export default class InputField extends Lightning.Component {
     static _template () {
         return {
@@ -21,7 +23,28 @@ export default class InputField extends Lightning.Component {
                 },
                 Labels: {
                     Icon: {x: 70, y: 70, mount: 0.5, zIndex: 10, src: Utils.asset(`images/search.png`)},
-                    Input: {alpha: 0.8, x: 140, y: 70, mountY: 0.43, zIndex: 10, text: {text: 'Search...', fontFace: 'Regular', fontSize: 54}}
+                    Input: {
+                        type: Input,
+                        x: 140,
+                        y: 70,
+                        h: 54,
+                        mountY: 0.43,
+                        zIndex: 10,
+                        description: 'Search...',
+                        inputText: {
+                            fontFace: 'Regular',
+                            fontSize: 54
+                        },
+                        cursor: {
+                            y: 3,
+                            w: 7, 
+                            h: 62,
+                            shader: {
+                                type: Lightning.shaders.RoundedRectangle,
+                                radius: 3
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -41,12 +64,8 @@ export default class InputField extends Lightning.Component {
         this._transitionPosition.settings.duration = 0.4;
     }
 
-    onInputChanged({input = ''}) {
-        const hasInput = input.length > 0;
-        this.tag('Input').patch({
-            alpha: hasInput ? 1 : 0.8,
-            text: {text: hasInput ? input : 'Search...'}
-        });
+    get input() {
+        return this.tag('Input');
     }
 
     maximize() {
@@ -54,13 +73,6 @@ export default class InputField extends Lightning.Component {
             return;
         }
         this._minized = false;
-        this.tag('Input').patch({
-            text: {
-                wordWrapWidth: 1100,
-                wrap: false,
-                fontSize: 54
-            }
-        });
         transition(this._transitionPosition, 330);
     }
 
@@ -69,13 +81,14 @@ export default class InputField extends Lightning.Component {
             return;
         }
         this._minized = true;
-        this.tag('Input').patch({
-            text: {
-                wordWrapWidth: 330,
-                wrap: true,
-                fontSize: 44,
-            }
-        });
         transition(this._transitionPosition, 1330);
+    }
+
+    _focus() {
+        this.tag('Input').cursor.setSmooth('color', Colors('focus').get())
+    }
+
+    _getFocused() {
+        return this.tag('Input');
     }
 }

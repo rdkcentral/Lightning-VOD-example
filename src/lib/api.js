@@ -3,7 +3,10 @@ const _headers = {
     'Content-Type': 'application/json;charset=utf-8'
 };
 const _params = {
-    'api_key': '66683917a94e703e14ca150023f4ea7c'
+    'api_key': '66683917a94e703e14ca150023f4ea7c',
+    include_adult: false,
+    include_video: true,
+    region: 'NL'
 };
 
 const _executeRequest = (config, retryCounter = 0) => {
@@ -99,8 +102,9 @@ const _fetchPageData = (lists, itemParams = {}) => {
 }
 
 export const getSearchResults = (query) => {
-    return getRequest({target: 'search/multi', params: {query, region: 'NL'}})
+    return getRequest({target: 'search/multi', params: {query}})
         .then((response) => {
+            response.results = response.results.filter(({media_type, poster_path}) => media_type !== 'person' && poster_path !== null);
             return response.results;
         })
 }

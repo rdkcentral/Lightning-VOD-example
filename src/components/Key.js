@@ -1,6 +1,6 @@
 import { Lightning, Colors, Utils } from "@lightningjs/sdk";
-
-export class Key extends Lightning.Component{
+import { Key as BaseKey } from '@lightningjs/ui';
+export class Key extends BaseKey {
     static _template() {
         return {
             Focus: {
@@ -8,17 +8,6 @@ export class Key extends Lightning.Component{
             },
             Label: {mountX: 0.5, x: w => w / 2, color: Colors('white').get(), mountY: 0.42, y: h => h / 2, text: {fontFace: 'Regular', fontSize: 44}}
         }
-    }
-
-    set label(str) {
-        this._label = str;
-        if(this.active) {
-            this.tag('Label').text.text = str.toUpperCase();
-        }
-    }
-
-    get label() {
-        return this._label;
     }
 
     _init() {
@@ -29,12 +18,22 @@ export class Key extends Lightning.Component{
         ]});
     }
 
+    set data(obj) {
+        this._data = obj;
+        this._update();
+    }
+
+    get data() {
+        return this._data;
+    }
+
     _update() {
         if(!this.active) {
             return;
         }
+        const {label} = this._data;
         this.patch({
-            Label: {text: this._label}
+            Label: {text: label}
         });
     }
 

@@ -1,8 +1,7 @@
-import { Lightning } from "@lightningjs/sdk";
+import { Lightning, Router } from "@lightningjs/sdk";
 import keyboardConfig from "../lib/keyboardConfig.js";
 import { ItemDescription } from "../components";
-import Keyboard from "../keyboard/Keyboard.js";
-import { Grid } from "@lightningjs/ui";
+import { Grid, Keyboard } from "@lightningjs/ui";
 import { transition } from "../lib/helpers.js";
 
 export default class Search extends Lightning.Component {
@@ -31,9 +30,7 @@ export default class Search extends Lightning.Component {
     }
 
     _setup() {
-        this.tag('Keyboard').inputField(this.widgets.inputfield)
-
-        
+        this.tag('Keyboard').inputField(this.widgets.inputfield.input);
     }
 
     _firstActive() {
@@ -101,10 +98,12 @@ export default class Search extends Lightning.Component {
                     return this.tag('Keyboard');
                 }
 
+                _handleUp() {
+                    Router.focusWidget('InputField');
+                }
+
                 _handleDown() {
-                    if(this.tag('Grid').hasItems) {
-                        this._setState('Grid');
-                    }
+                    this.tag('Keyboard').clear();
                 }
             },
             class Grid extends this {
