@@ -12,7 +12,7 @@ export default keyboardConfig = {
             ['Layout:ABC', 'Space', 'Backspace']
         ]
     },
-    offsets: {
+    styling: {
         align: 'center',
         horizontalSpacing: 15,
         verticalSpacing: 20,

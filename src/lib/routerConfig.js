@@ -1,9 +1,13 @@
 import { Item } from "../components";
-import { Main, Search } from "../pages";
+import { Main, Search, Splash } from "../pages";
 import { getHomePage, getMoviesPage, getSearchResults, getSeriesPage } from "./api.js";
 import { createItemCollection, createPageComponents } from "./Factory.js";
 
 const routes = [
+    {
+        path: 'splash',
+        component: Splash
+    },
     {
         path: 'home',
         component: Main,

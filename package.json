@@ -3,6 +3,6 @@
   "description": "VOD Example",
   "dependencies": {
     "@lightningjs/sdk": "^4.6.1",
-    "@lightningjs/ui": "github:rdkcentral/Lightning-ui#keyboard-expansion"
+    "@lightningjs/ui": "^1.1.1"
   }
 }
