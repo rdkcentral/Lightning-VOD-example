@@ -103,7 +103,9 @@ export default class Search extends Lightning.Component {
                 }
 
                 _handleDown() {
-                    this.tag('Keyboard').clear();
+                    if(this.tag('Grid').hasItems) {
+                        this._setState('Grid');
+                    }
                 }
             },
             class Grid extends this {

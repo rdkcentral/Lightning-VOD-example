@@ -139,6 +139,13 @@ export const getSeriesPage = () => {
     ], {media_type: 'tv'});
 }
 
+export const getDetailPage = (mediaType, mediaId) => {
+    return getRequest({target: `${mediaType}/${mediaId}`, params: {append_to_response: 'episode_groups'}})
+        .then((response) => {
+            return {media_type: mediaType, ...response};
+        })
+}
+
 const _futureDate = (date) => {
     const currentYear = date.getFullYear();
     const currentMonth = date.getMonth();

@@ -1,13 +1,9 @@
 import { Item } from "../components";
-import { Main, Search, Splash } from "../pages";
-import { getHomePage, getMoviesPage, getSearchResults, getSeriesPage } from "./api.js";
-import { createItemCollection, createPageComponents } from "./Factory.js";
+import { Detail, Main, Search, Splash } from "../pages";
+import { getDetailPage, getHomePage, getMoviesPage, getSearchResults, getSeriesPage } from "./api.js";
+import { applyItemModel, createItemCollection, createPageComponents } from "./Factory.js";
 
 const routes = [
-    {
-        path: 'splash',
-        component: Splash
-    },
     {
         path: 'home',
         component: Main,
@@ -58,7 +54,22 @@ const routes = [
             }
             return true;
         }
-    }
+    },
+    {
+        path: 'detail/:mediaType/:mediaId',
+        component: Detail,
+        before: async (page, {mediaType, mediaId}) => {
+            getDetailPage(mediaType, mediaId)
+                .then((response) => {
+                    page.setData(applyItemModel(response));
+                    return true;
+                });
+        }
+    },
+    {
+        path: '$',
+        component: Splash
+    },
 ]
 
 export default {

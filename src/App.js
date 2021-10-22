@@ -27,7 +27,8 @@ export default class App extends Router.App{
     return [
       { family: 'Regular', url: Utils.asset('fonts/Montserrat-Regular.ttf') },
       { family: 'Medium', url: Utils.asset('fonts/Montserrat-Medium.ttf') },
-      { family: 'Bold', url: Utils.asset('fonts/Montserrat-Bold.ttf') }
+      { family: 'Bold', url: Utils.asset('fonts/Montserrat-Bold.ttf') },
+      { family: 'MediumItalic', url: Utils.asset('fonts/Montserrat-MediumItalic.ttf') }
     ]
   }
 

@@ -6,7 +6,7 @@ export default class Main extends Lightning.Component {
     static _template() {
         return {
             ItemDescription: {x: 230, y: 90, type: ItemDescription},
-            List: {x: 140, type: List, w: w => w, h: 1080, direction: 'column', scroll: 580, scrollTransition: {duration: 0.4}}
+            List: {x: 140, type: List, w: w => w, y: 580, h: 500, direction: 'column', scroll: 0, scrollTransition: {duration: 0.4}}
         }
     }
 

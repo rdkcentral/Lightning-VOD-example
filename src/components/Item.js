@@ -1,4 +1,4 @@
-import { Colors, Img, Lightning } from '@lightningjs/sdk';
+import { Colors, Img, Lightning, Router } from '@lightningjs/sdk';
 
 export default class Item extends Lightning.Component {
     static _template() {
@@ -31,6 +31,11 @@ export default class Item extends Lightning.Component {
             Focus: {smooth: {alpha: 0}},
             Poster: {smooth: {y: 0}}
         });
+    }
+
+    _handleEnter() {
+        const {id, media_type} = this.item;
+        Router.navigate(`detail/${media_type}/${id}`);
     }
 
     static get width() {

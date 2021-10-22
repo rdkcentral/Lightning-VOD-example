@@ -34,7 +34,7 @@ export default class Menu extends Lightning.Component {
                 }
             },
             Focus: {
-                zIndex: 10, x: w => w, mountX: 0.5, w: 14, h: 100, y: Menu.focusDefaultPosition, rtt: true, shader: { type: Lightning.shaders.RoundedRectangle, radius: 7 },
+                zIndex: 10, x: w => w, mountX: 0.5, w: 14, h: 100, y: Menu.focusDefaultPosition, rtt: true, shader: { type: Lightning.shaders.RoundedRectangle, radius: 7 }, transitions: {y: {duration: 0.3}, h: {duration: 0.3}},
                 Lighting: {
                     w: w => w, h: h => h, rect: true,
                     shader: {

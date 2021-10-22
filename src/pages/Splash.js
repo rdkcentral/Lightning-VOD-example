@@ -1,4 +1,4 @@
-import { Lightning, Utils } from "@lightningjs/sdk";
+import { Lightning, Utils, Router } from "@lightningjs/sdk";
 import CutOut from "../shaders/CutOut.js";
 
 export default class Splash extends Lightning.Component {
@@ -15,7 +15,7 @@ export default class Splash extends Lightning.Component {
                         y: 70, x: 276, src: Utils.asset('images/logo/o.png')
                     },
                     D: {
-                        y: 70, x: 574, src: Utils.asset('images/logo/d.png')
+                        y: 70, x: 576, src: Utils.asset('images/logo/d.png')
                     }
                 },
                 ExampleApp: {
@@ -34,12 +34,18 @@ export default class Splash extends Lightning.Component {
                 {t: 'O', p: 'y', v: {0.25: 70, 0.5: -20, 0.6: 0}},
                 {t: 'D', p: 'alpha', v: {0.5: 0, 0.75: 1}},
                 {t: 'D', p: 'y', v: {0.5: 70, 0.75: -20, 0.85: 0}},
-                {t: 'ExampleApp', p: 'x', v: {0.2: 600, 1: 815}},
-                {t: 'ExampleApp', p: 'alpha', v: {0.2: 0, 1: 1}},
+                {t: 'ExampleApp', p: 'x', v: {0.6: 680, 0.9: 815}},
+                {t: 'ExampleApp', p: 'alpha', v: {0.6: 0, 0.9: 1}},
                 {p: 'shader.outerColor', v: {0.80: 0xffffffff, 1: 0x00ffffff}},
                 {p: 'shader.innerColor', v: {0.80: 0x00ffffff, 1: 0xffffffff}}
             ]
         });
+
+        this._openAnimation.on('finish', () => {
+            setTimeout(() => {
+                Router.resume();
+            }, 1000)
+        })
     }
 
     _active() {
