@@ -1,8 +1,8 @@
-import { Item } from "../components";
-import { Detail, Main, Search, Splash } from "../pages";
+import { Item, Page } from "../components";
+import { Main, Search, Splash } from "../pages";
 import { getDetailPage, getHomePage, getMoviesPage, getSearchResults, getSeriesPage } from "./api.js";
 import { applyItemModel, createItemCollection, createPageComponents } from "./Factory.js";
-
+import { Lightning, Router } from "@lightningjs/sdk";
 const routes = [
     {
         path: 'home',
@@ -14,7 +14,7 @@ const routes = [
                     return true;
                 })
         },
-        widgets: ['menu']
+        widgets: ['menu', 'detail']
     },
     {
         path: 'movies',
@@ -26,7 +26,7 @@ const routes = [
                     return true;
                 })
         },
-        widgets: ['menu']
+        widgets: ['menu', 'detail']
     },
     {
         path: 'series',
@@ -38,7 +38,7 @@ const routes = [
                     return true;
                 })
         },
-        widgets: ['menu']
+        widgets: ['menu', 'detail']
     },
     {
         path: 'search',
@@ -53,18 +53,31 @@ const routes = [
                     });
             }
             return true;
-        }
+        },
+        widgets: ['detail']
     },
     {
         path: 'detail/:mediaType/:mediaId',
-        component: Detail,
+        component: class Detail extends Page {
+            pageTransition(pageIn, pageOut) {
+                pageOut.setSmooth('alpha', 0, {delay: 0.0, duration: 0.2});
+                pageIn.widgets.menu.setSmooth('alpha', 0, {delay: 0.0, duration: 0.2});
+                return this._pageTransition(pageIn, pageOut);
+            }
+            _active() {
+                Router.focusWidget('detail');
+            }
+        },
         before: async (page, {mediaType, mediaId}) => {
             getDetailPage(mediaType, mediaId)
                 .then((response) => {
-                    page.setData(applyItemModel(response));
+                    const dataItem = applyItemModel(response);
+                    page.widgets.detail.show(dataItem);
+                    page.widgets.detail.showMore(dataItem);
                     return true;
                 });
-        }
+        },
+        widgets: ['detail']
     },
     {
         path: '$',

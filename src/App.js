@@ -18,7 +18,7 @@
  */
 
 import { Utils, Router } from '@lightningjs/sdk';
-import { Menu, InputField } from './widgets';
+import { Menu, InputField, Detail } from './widgets';
 import routerConfig from './lib/routerConfig.js';
 import { Backdrop, AmbientBackground } from './components';
 
@@ -50,9 +50,16 @@ export default class App extends Router.App{
         },
         InputField: {
           type: InputField, visible: true
+        },
+        Detail: {
+          type: Detail, visible: true
         }
       }
     }
+  }
+
+  $getDetailWidget() {
+    return this.tag('Widgets.Detail');
   }
 
   $getAppContentTexture() {

@@ -2,7 +2,7 @@ import { Strip, Item} from "@/components"
 
 export const createPageComponents = (strips) => {
     return strips.map(({title, media_type, items}) => {
-        return {type: Strip, itemType: Item, h: Item.height + 80, title, items: createItemCollection(items, media_type)}
+        return {type: Strip, itemType: Item, h: Item.height + 80, title, index: 0, items: createItemCollection(items, media_type)}
     });
 }
 
@@ -13,11 +13,12 @@ export const createItemCollection = (items, media_type = 'tv') => {
 };
 
 export const applyItemModel = (item) => {
-    const {id, title, name, media_type = 'tv', genres, tagline, runtime, overview, poster_path, backdrop_path} = item;
+    const {id, title, name, media_type = 'tv', number_of_episodes, number_of_seasons, genres, runtime, overview, poster_path, backdrop_path} = item;
     return {
         id,
         media_type,
-        tagline,
+        number_of_episodes,
+        number_of_seasons,
         genres,
         runtime,
         title: media_type === 'tv' ? name : title,
@@ -26,4 +27,4 @@ export const applyItemModel = (item) => {
         large_poster: `http://image.tmdb.org/t/p/w300/${poster_path}`,
         backdrop: `http://image.tmdb.org/t/p/original/${backdrop_path}`
     }
-}
+}   

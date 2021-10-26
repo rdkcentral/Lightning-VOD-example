@@ -55,6 +55,6 @@ CutOut.fragmentShaderSource = `
     uniform vec4 outerColor;
     void main(void){
         vec4 tx = texture2D(uSampler, vTextureCoord) * vColor;
-        gl_FragColor = mix( outerColor, innerColor, tx.a);
+        gl_FragColor = mix( outerColor * vColor, innerColor * vColor, tx.a);
     }
 `;

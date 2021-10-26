@@ -7,14 +7,13 @@ import { transition } from "../lib/helpers.js";
 export default class Search extends Lightning.Component {
     static _template () {
         return {
-            ItemDescription: { x: 230, y: 90, type: ItemDescription },
             Keyboard: {mountX: 0.5, y: 330, x: 960, w: 935, type: Keyboard, currentLayout: 'ABC', config: keyboardConfig, signals: {onInputChanged: true}},
-            Grid: {alpha: 0.001, y: 90, mountX: 0.5, x: 960, type: SearchGrid, w: 1535, h: 1080, columns: 7, scroll: 640, scrollTransition: {duration: 0.4}}
+            Content: {alpha: 0.001, y: 90, mountX: 0.5, x: 960, type: SearchGrid, w: 1535, h: 1080, columns: 7, scroll: 640, scrollTransition: {duration: 0.4}}
         }
     }
 
     onInputChanged({input}) {
-        const grid = this.tag('Grid');
+        const grid = this.tag('Content');
         grid.setSmooth('alpha', 0.001);
         if(input.length === 0) {
             this._clearSearchTimeout();
@@ -55,7 +54,7 @@ export default class Search extends Lightning.Component {
         if(this.onSearch && this.onSearch.apply && this.onSearch.call) {
             this.onSearch(this._input)
                 .then((response) => {
-                    const grid = this.tag('Grid');
+                    const grid = this.tag('Content');
                     grid.clear();
                     if(response.length > 0) {
                         grid.add(response);
@@ -66,7 +65,7 @@ export default class Search extends Lightning.Component {
     }
 
     _init() {
-        const grid = this.tag('Grid');
+        const grid = this.tag('Content');
         this._focusTransitionY = grid.transition('y');
         grid.transition('alpha').on('finish', () => {
             if(grid.alpha === 0.001 && this._input.length === 0) {
@@ -103,7 +102,7 @@ export default class Search extends Lightning.Component {
                 }
 
                 _handleDown() {
-                    if(this.tag('Grid').hasItems) {
+                    if(this.tag('Content').hasItems) {
                         this._setState('Grid');
                     }
                 }
@@ -119,7 +118,7 @@ export default class Search extends Lightning.Component {
                 }
 
                 _getFocused() {
-                    return this.tag('Grid');
+                    return this.tag('Content');
                 }
 
                 _handleUp() {

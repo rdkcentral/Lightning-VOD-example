@@ -28,6 +28,9 @@ export default class Backdrop extends Lightning.Component {
                 this._animateBackdrop();
             }
         });
+        this.tag('ImgSource').on('txError', (texture) => {
+            this.fireAncestors('$updateAmbientBackground', {color: 0xff9300e0});
+        });
         this.tag('ImgSource').on('txLoaded', (texture) => {
             if(this._imgSource.src === texture.src) {
                 this._imgSrcLoaded = texture.source.nativeTexture;

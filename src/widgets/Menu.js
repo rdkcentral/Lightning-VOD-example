@@ -1,4 +1,4 @@
-import { Colors, Img, Lightning, Router, Utils } from "@lightningjs/sdk";
+import { Colors, Lightning, Router, Utils } from "@lightningjs/sdk";
 import { List } from "@lightningjs/ui";
 import { transition, animation } from "../lib/helpers";
 
@@ -142,6 +142,14 @@ export default class Menu extends Lightning.Component {
             ]
         }).start();
         this._pivotValue = 0.5;
+    }
+
+    _handleKey() {
+        return true;
+    }
+
+    _handleRight() {
+        Router.focusPage();
     }
 
     _focus() {

@@ -1,4 +1,4 @@
-import { Colors, Img, Lightning, Router } from '@lightningjs/sdk';
+import { Colors, Img, Lightning, Router, Utils } from '@lightningjs/sdk';
 
 export default class Item extends Lightning.Component {
     static _template() {
@@ -16,10 +16,17 @@ export default class Item extends Lightning.Component {
         });
     }
 
+    _init() {
+        const poster = this.tag('Poster');
+        poster.on('txError', () => {
+            poster.src = Utils.asset('images/missingImage.jpg')
+        });
+    }
+
     _focus() {
-        const {backdrop, title, description} = this.item;
+        const {backdrop, id, title, description} = this.item;
         this.fireAncestors('$updateBackdrop', {src: backdrop});
-        this.fireAncestors('$updateItemTitle', {title, description});
+        this.fireAncestors('$getDetailWidget').show({id, title, description});
         this.patch({
             Focus: {smooth: {alpha: 1}},
             Poster: {smooth: {y: -15}}
@@ -35,7 +42,7 @@ export default class Item extends Lightning.Component {
 
     _handleEnter() {
         const {id, media_type} = this.item;
-        Router.navigate(`detail/${media_type}/${id}`);
+        Router.navigate(`detail/${media_type}/${id}`, {keepAlive: true});
     }
 
     static get width() {

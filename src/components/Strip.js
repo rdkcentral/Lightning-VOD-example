@@ -13,6 +13,14 @@ export default class Strip extends Lightning.Component {
         }
     }
 
+    set index(num) {
+        this._index = num;
+    }
+
+    get index() {
+        return this.tag('List').index;
+    }
+
     _init()  {
         this._transitionAlpha = this.transition('alpha');
         this._transitionLabel = this.tag('Label').transition('y');
@@ -30,10 +38,9 @@ export default class Strip extends Lightning.Component {
             alpha: index >= parentIndex,
             Label: {text: {text: this.title}},
             List: {
-                itemType: this.itemType, items: this.items
+                itemType: this.itemType, items: this.items, index: this._index
             }
         });
-        this._refocus();
     }
 
     _unfocus() {
