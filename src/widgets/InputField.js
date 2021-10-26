@@ -61,7 +61,11 @@ export default class InputField extends Lightning.Component {
 
     _init() {
         this._transitionPosition = this.transition('positionX');
-        this._transitionPosition.settings.duration = 0.4;
+        this._transitionPosition.settings.duration = 0.2;
+
+        this._minimize = this.animation({duration: 0.4, actions: [
+            {p: 'x', v: {0: 330, 0.5: 1330}},
+        ]});
     }
 
     get input() {
@@ -73,7 +77,7 @@ export default class InputField extends Lightning.Component {
             return;
         }
         this._minized = false;
-        transition(this._transitionPosition, 330);
+        this._minimize.stop();
     }
 
     minimize() {
@@ -81,7 +85,7 @@ export default class InputField extends Lightning.Component {
             return;
         }
         this._minized = true;
-        transition(this._transitionPosition, 1330);
+        this._minimize.start();
     }
 
     _focus() {

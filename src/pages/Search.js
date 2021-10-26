@@ -1,15 +1,27 @@
-import { Lightning, Router } from "@lightningjs/sdk";
+import { Router } from "@lightningjs/sdk";
 import keyboardConfig from "../lib/keyboardConfig.js";
-import { ItemDescription } from "../components";
+import { Page } from "../components";
 import { Grid, Keyboard } from "@lightningjs/ui";
 import { transition } from "../lib/helpers.js";
 
-export default class Search extends Lightning.Component {
+export default class Search extends Page {
     static _template () {
         return {
             Keyboard: {mountX: 0.5, y: 330, x: 960, w: 935, type: Keyboard, currentLayout: 'ABC', config: keyboardConfig, signals: {onInputChanged: true}},
             Content: {alpha: 0.001, y: 90, mountX: 0.5, x: 960, type: SearchGrid, w: 1535, h: 1080, columns: 7, scroll: 640, scrollTransition: {duration: 0.4}}
         }
+    }
+
+    pageTransition(pageIn, pageOut) {
+        pageOut.setSmooth('alpha', 0, {delay: 0.0, duration: 0.2});
+        pageIn.widgets.menu.setSmooth('alpha', 0, {delay: 0.0, duration: 0.2});
+        const inputfield = pageIn.widgets.inputfield;
+        if(inputfield.alpha !== 1) {
+            inputfield.visible = true;
+            inputfield.alpha = 0.001;
+            inputfield.setSmooth('alpha', 1, {delay: 0.2, duration: 0.2});
+        }
+        return this._pageTransition(pageIn, pageOut);
     }
 
     onInputChanged({input}) {
@@ -22,10 +34,6 @@ export default class Search extends Lightning.Component {
             this._startSearchTimeout();
         }
         this._input = input;
-    }
-
-    $updateItemTitle(e) {
-        this.tag('ItemDescription').item = e;
     }
 
     _setup() {
@@ -72,9 +80,9 @@ export default class Search extends Lightning.Component {
                 grid.clear();
             }
         })
-        this._hideKeyboard = this.tag('Keyboard').animation({duration: 0.4, timingFunction: 'ease', actions: [
-            {p: 'x', v: {0: 960, 1: 1960}},
-            {p: 'alpha', v: {0: 1, 1: 0}},
+        this._hideKeyboard = this.tag('Keyboard').animation({duration: 0.4, actions: [
+            {p: 'x', v: {0: 960, 0.5: 1000}},
+            {p: 'alpha', v: {0: 1, 0.5: 0}},
         ]});
     }
 
@@ -84,13 +92,16 @@ export default class Search extends Lightning.Component {
                 $enter() {
                     this.fireAncestors('$updateBackdrop', {src: null});
                     this.fireAncestors('$updateAmbientBackground', {color: 0xff9300e0});
+                    
                     this._hideKeyboard.stop();
                     this.widgets.inputfield.maximize();
+                    this.widgets.detail.setSmooth('alpha', 0.001, {duration: 0.2, delay: 0});
                 }
 
                 $exit() {
                     this._hideKeyboard.start();
                     this.widgets.inputfield.minimize();
+                    this.widgets.detail.setSmooth('alpha', 1, {duration: 0.2, delay: 0.2});
                 }
 
                 _getFocused() {
@@ -113,7 +124,6 @@ export default class Search extends Lightning.Component {
                 }
 
                 $exit() {
-                    this.tag('ItemDescription').hide();
                     transition(this._focusTransitionY, 90);
                 }
 

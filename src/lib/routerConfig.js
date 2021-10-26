@@ -44,8 +44,8 @@ const routes = [
         path: 'search',
         component: Search,
         widgets: ['inputfield'],
-        before: async (page) => {
-            page.tag('Grid').itemType = Item;
+        on: async (page) => {
+            page.tag('Content').itemType = Item;
             page.onSearch = async (input) => {
                 return getSearchResults(input)
                     .then((response) => {
@@ -54,7 +54,7 @@ const routes = [
             }
             return true;
         },
-        widgets: ['detail']
+        widgets: ['inputfield', 'detail']
     },
     {
         path: 'detail/:mediaType/:mediaId',
@@ -62,6 +62,7 @@ const routes = [
             pageTransition(pageIn, pageOut) {
                 pageOut.setSmooth('alpha', 0, {delay: 0.0, duration: 0.2});
                 pageIn.widgets.menu.setSmooth('alpha', 0, {delay: 0.0, duration: 0.2});
+                // pageIn.widgets.inputfield.setSmooth('alpha', 0, {delay: 0.0, duration: 0.2});
                 return this._pageTransition(pageIn, pageOut);
             }
             _active() {
