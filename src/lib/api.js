@@ -140,7 +140,7 @@ export const getSeriesPage = () => {
 }
 
 export const getDetailPage = (mediaType, mediaId) => {
-    return getRequest({target: `${mediaType}/${mediaId}`, params: {append_to_response: 'episode_groups'}})
+    return getRequest({target: `${mediaType}/${mediaId}`, params: {append_to_response: 'episode_groups,images'}})
         .then((response) => {
             return {media_type: mediaType, ...response};
         })

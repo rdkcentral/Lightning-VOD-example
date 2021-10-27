@@ -74,6 +74,20 @@ export default class App extends Router.App{
     this.tag('AmbientBackground').update(e.color);
   }
 
+  $hideBackground() {
+    this.tag('Content').patch({
+      AmbientBackground: {smooth: {alpha: [0, {duration: 0.2, delay: 0.0}]}},
+      Backdrop: {smooth: {alpha: [0, {duration: 0.2, delay: 0.0}]}}
+    });
+  }
+
+  $showBackground() {
+    this.tag('Content').patch({
+      AmbientBackground: {smooth: {alpha: [1, {duration: 0.2, delay: 0.2}]}},
+      Backdrop: {smooth: {alpha: [1, {duration: 0.2, delay: 0.2}]}}
+    });
+  }
+
   _setup() {
     Router.startRouter(routerConfig, this);
   }

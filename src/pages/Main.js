@@ -9,6 +9,16 @@ export default class Main extends Page {
         }
     }
 
+    pageTransition(pageIn, pageOut) {
+        const menu = pageIn.widgets.menu;
+        if(menu.alpha !== 1) {
+            menu.visible = true;
+            menu.alpha = 0.001;
+            menu.setSmooth('alpha', 1, {delay: 0.2, duration: 0.2});
+        }
+        return super.pageTransition(pageIn, pageOut);
+    }
+
     _getFocused() {
         return this.tag('Content');
     }

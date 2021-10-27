@@ -20,6 +20,12 @@ export default class Splash extends Lightning.Component {
                 },
                 ExampleApp: {
                     x: 815, y: 655, src: Utils.asset('images/logo/example-app.png')
+                },
+                ProvidedBy: {
+                    y: 920, x: 1840, mount: 1, text: {text: 'Data provided by:', fontFace: 'Regular', fontSize: 18, lineHeight: 28}
+                },
+                TMDB: {
+                    y: 1000, x: 1840, mount: 1, src: Utils.asset('images/tmdb-logo.png')
                 }
             }
         }

@@ -13,7 +13,6 @@ export default class Search extends Page {
     }
 
     pageTransition(pageIn, pageOut) {
-        pageOut.setSmooth('alpha', 0, {delay: 0.0, duration: 0.2});
         pageIn.widgets.menu.setSmooth('alpha', 0, {delay: 0.0, duration: 0.2});
         const inputfield = pageIn.widgets.inputfield;
         if(inputfield.alpha !== 1) {
@@ -21,7 +20,7 @@ export default class Search extends Page {
             inputfield.alpha = 0.001;
             inputfield.setSmooth('alpha', 1, {delay: 0.2, duration: 0.2});
         }
-        return this._pageTransition(pageIn, pageOut);
+        return super.pageTransition(pageIn, pageOut);
     }
 
     onInputChanged({input}) {
