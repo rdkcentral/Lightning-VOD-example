@@ -1,6 +1,6 @@
-import { Lightning, Router } from "@lightningjs/sdk";
+import { Router } from "@lightningjs/sdk";
 import { List } from "@lightningjs/ui";
-import { ItemDescription, Page } from "../components";
+import { Page } from "../components";
 
 export default class Main extends Page {
     static _template() {
@@ -28,9 +28,6 @@ export default class Main extends Page {
     }
 
     addStrips(array) {
-        // const {backdrop, title, description} = array[0].items[0].item;
-        // this.fireAncestors('$updateBackdrop', {src: backdrop});
-        // this.fireAncestors('$getDetailWidget').show({title, description});
         this.tag('Content').add(array);
         this._refocus();
     }

@@ -6,15 +6,16 @@ export class Key extends BaseKey {
             Focus: {
                 alpha: 0, mount: 0.5, x: w => w / 2, y: h => h /2, w: w => w + 10, h: h => h + 10, rect: true, colorBottom: Colors('focus2').get(), colorTop: Colors('focus').get(), shader: {type: Lightning.shaders.RoundedRectangle, stroke: 7, strokeColor: 0xffffffff, fillColor: 0x00ffffff, radius: 22, blend: 1}
             },
-            Label: {mountX: 0.5, x: w => w / 2, color: Colors('white').get(), mountY: 0.42, y: h => h / 2, text: {fontFace: 'Regular', fontSize: 44}}
+            Label: {alpha: 0.8, mountX: 0.5, x: w => w / 2, color: Colors('white').get(), mountY: 0.42, y: h => h / 2, text: {fontFace: 'Regular', fontSize: 44}}
         }
     }
 
     _init() {
-        this._focusAnimation = this.tag('Focus').animation({duration: 0.2, actions: [
-            {p: 'alpha', v: {0: 0, 1: 1}},
-            {p: 'h', v: {0: this.h, 1: this.h + 10}},
-            {p: 'w', v: {0: this.w, 1: this.w + 10}},
+        this._focusAnimation = this.animation({duration: 0.2, actions: [
+            {t: 'Focus', p: 'alpha', v: {0: 0, 1: 1}},
+            {t: 'Focus', p: 'h', v: {0: this.h, 1: this.h + 10}},
+            {t: 'Focus', p: 'w', v: {0: this.w, 1: this.w + 10}},
+            {t: 'Label', p: 'alpha', v: {0: 0.8, 1: 1}},
         ]});
     }
 

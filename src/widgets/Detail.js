@@ -155,6 +155,11 @@ export default class Detail extends Lightning.Component {
         Router.back();
     }
 
+    _handleEnter() {
+        const {id, media_type} = this._data;
+        Router.navigate(`player/${media_type}/${id}`);
+    }
+
     _getFocused() {
         return this.tag('PlayButton');
     }

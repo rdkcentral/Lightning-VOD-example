@@ -77,6 +77,7 @@ export default class Backdrop extends Lightning.Component {
     }
     
     update(src) {
+        console.log('update', src)
         if(src === this._targetSrc) {
             this.fireAncestors('$updateAmbientBackground', {color: this._extractedColor});
             return;

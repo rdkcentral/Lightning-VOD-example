@@ -1,7 +1,7 @@
 import { Item } from "../components";
 import { Main, Search, Splash, Detail, Player } from "../pages";
 import { getDetailPage, getHomePage, getMoviesPage, getSearchResults, getSeriesPage } from "./api.js";
-import { applyItemModel, createItemCollection, createPageComponents } from "./Factory.js";
+import { applyItemModel, applyPlayerModel, createItemCollection, createPageComponents } from "./Factory.js";
 const routes = [
     {
         path: 'home',
@@ -75,9 +75,8 @@ const routes = [
         before: async (page, {mediaType, mediaId}) => {
             getDetailPage(mediaType, mediaId)
                 .then((response) => {
-                    const dataItem = applyItemModel(response);
-                    page.widgets.detail.show(dataItem);
-                    page.widgets.detail.showMore(dataItem);
+                    const dataItem = applyPlayerModel(response);
+                    page.setData(dataItem);
                     return true;
                 });
         }

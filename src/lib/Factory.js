@@ -27,4 +27,15 @@ export const applyItemModel = (item) => {
         large_poster: `http://image.tmdb.org/t/p/w300/${poster_path}`,
         backdrop: `http://image.tmdb.org/t/p/original/${backdrop_path}`
     }
-}   
+}
+
+export const applyPlayerModel = (item) => {
+    console.log('test', item)
+    const {id, title, name, media_type, images: {backdrops}} = item;
+    const backdropPath = backdrops.length > 0 ? backdrops[Math.min(1, backdrops.length-1)].file_path : '';
+    return {
+        id,
+        title: media_type === 'tv' ? name : title,
+        backdrop: `http://image.tmdb.org/t/p/original/${backdropPath}`
+    }
+} 
