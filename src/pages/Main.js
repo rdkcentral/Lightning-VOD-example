@@ -28,8 +28,12 @@ export default class Main extends Page {
     }
 
     addStrips(array) {
-        this.tag('Content').add(array);
-        this._refocus();
+        if(this._hasData) {
+            return;
+        }
+        this._hasData = true;
+        const content = this.tag('Content');
+        content.add(array);
     }
 
     _handleLeft() {

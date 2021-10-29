@@ -88,7 +88,6 @@ export default class Player extends Page {
 
         //this event should be fired when the stop event is fired.
         this._progressAnimation.on('stop', (p) => {
-            console.log('stop')
             this._showEventMessage(`handle player stop`);
             this._showOverlay();
             this._showScreenBlock();
