@@ -8,7 +8,7 @@ export default class InputField extends Lightning.Component {
             x: 330, y: 140, zIndex: 9,
             onPositionChanged: this.bindProp('positionX', (comp) => {
                 if(comp.active) {
-                    comp.mirroredContent.x = 330 - comp.positionX;
+                    comp.mirroredContent.x = 330-comp.positionX;
                     comp.x = comp.positionX;
                 }
                 return comp.positionX;
@@ -60,11 +60,8 @@ export default class InputField extends Lightning.Component {
     }
 
     _init() {
-        this._transitionPosition = this.transition('positionX');
-        this._transitionPosition.settings.duration = 0.2;
-
         this._minimize = this.animation({duration: 0.4, actions: [
-            {p: 'x', v: {0: 330, 0.5: 1330}},
+            {p: 'positionX', v: {0: 330, 0.5: 1330}},
         ]});
     }
 
@@ -78,6 +75,7 @@ export default class InputField extends Lightning.Component {
         }
         this._minized = false;
         this._minimize.stop();
+        this.tag('Input').cursor.show();
     }
 
     minimize() {
@@ -86,6 +84,7 @@ export default class InputField extends Lightning.Component {
         }
         this._minized = true;
         this._minimize.start();
+        this.tag('Input').cursor.hide();
     }
 
     _focus() {
