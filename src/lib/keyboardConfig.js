@@ -1,6 +1,6 @@
 import { IconKey, Key } from "../components/Key.js";
 
-export default keyboardConfig = {
+export default {
     layouts: {
         'ABC': [
             ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'],
