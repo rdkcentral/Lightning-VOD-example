@@ -77,6 +77,7 @@ export default class Player extends Page {
 
         //This event should be fired when the play event is fired. resume == play
         this._progressAnimation.on('resume', () => {
+            this._startOverlayTimeout();
             this._updatePlayButton(false);
         })
 
@@ -151,7 +152,7 @@ export default class Player extends Page {
 
     _updatePlayButton(toPlay = true) {
         this.tag('PlayerButtons').items[1].icon = `images/${toPlay ? 'play' : 'pause'}.png`;
-        if(toPlay) {
+        if(!toPlay) {
             this._startOverlayTimeout();
         }
     }
