@@ -30,7 +30,6 @@ export const applyItemModel = (item) => {
 }
 
 export const applyPlayerModel = (item) => {
-    console.log('test', item)
     const {id, title, name, media_type, images: {backdrops}} = item;
     const backdropPath = backdrops.length > 0 ? backdrops[Math.min(1, backdrops.length-1)].file_path : '';
     return {

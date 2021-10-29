@@ -70,16 +70,14 @@ export class IconKey extends Key {
     }
 
     _update() {
-        if(!this.active) {
-            return;
-        }
-        this.patch({
-            Icon: {src: Utils.asset(this._icon)}
-        });
+        //block parent update
     }
 
     set icon(src) {
         this._icon = src;
+        this.patch({
+            Icon: {src: Utils.asset(this._icon)}
+        });
     }
 
     get icon() {

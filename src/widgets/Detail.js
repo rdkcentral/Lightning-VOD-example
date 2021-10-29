@@ -128,6 +128,7 @@ export default class Detail extends Lightning.Component {
                 }
             }
         });
+        this._data = data;
     }
 
     _unfocus() {
