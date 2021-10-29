@@ -58,6 +58,10 @@ export default class App extends Router.App{
     }
   }
 
+  _handleAppClose() {
+    this.application.closeApp();
+  }
+  
   $getDetailWidget() {
     return this.tag('Widgets.Detail');
   }

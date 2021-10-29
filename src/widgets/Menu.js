@@ -207,7 +207,12 @@ class MenuItem extends Lightning.Component {
     }
 
     _handleEnter() {
-        Router.navigate(this.item.toLowerCase());
+        if(this.item === 'close') {
+            this.application.closeApp();
+        }
+        else {
+            Router.navigate(this.item.toLowerCase());
+        }
     }
 
     _focus() {
