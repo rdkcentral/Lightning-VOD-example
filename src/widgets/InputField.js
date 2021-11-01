@@ -20,29 +20,29 @@ export default class InputField extends Lightning.Component {
                     w: 1260, h: 140, zIndex: 9, type: Lightning.components.FastBlurComponent, amount: 3, content: {
                         MirrorContent: {color: Colors('white').darker(0.4).get()}
                     }
-                },
-                Labels: {
-                    Icon: {x: 70, y: 70, mount: 0.5, zIndex: 10, src: Utils.asset(`images/search.png`)},
-                    Input: {
-                        type: Input,
-                        x: 140,
-                        y: 70,
-                        h: 54,
-                        mountY: 0.43,
-                        zIndex: 10,
-                        description: 'Search...',
-                        inputText: {
-                            fontFace: 'Regular',
-                            fontSize: 54
-                        },
-                        cursor: {
-                            y: 3,
-                            w: 7, 
-                            h: 62,
-                            shader: {
-                                type: Lightning.shaders.RoundedRectangle,
-                                radius: 3
-                            }
+                }
+            },
+            Labels: {
+                Icon: {x: 70, y: 70, mount: 0.5, zIndex: 10, src: Utils.asset(`images/search.png`)},
+                Input: {
+                    type: Input,
+                    x: 140,
+                    y: 70,
+                    h: 54,
+                    mountY: 0.43,
+                    zIndex: 10,
+                    description: 'Search...',
+                    inputText: {
+                        fontFace: 'Regular',
+                        fontSize: 54
+                    },
+                    cursor: {
+                        y: 3,
+                        w: 7, 
+                        h: 62,
+                        shader: {
+                            type: Lightning.shaders.RoundedRectangle,
+                            radius: 3
                         }
                     }
                 }

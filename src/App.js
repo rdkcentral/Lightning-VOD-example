@@ -18,7 +18,7 @@
  */
 
 import { Utils, Router } from '@lightningjs/sdk';
-import { Menu, InputField, Detail } from './widgets';
+import { Menu, InputField, Detail, Dialog } from './widgets';
 import routerConfig from './lib/routerConfig.js';
 import { Backdrop, AmbientBackground } from './components';
 
@@ -53,15 +53,32 @@ export default class App extends Router.App{
         },
         Detail: {
           type: Detail, visible: true
-        }
+        },
+        Dialog: {
+          visible: false, type: Dialog, zIndex: 101
+        },
       }
     }
   }
 
   _handleAppClose() {
-    this.application.closeApp();
+    const dialog = this.tag('Dialog');
+    dialog.open({header: "Closing App?!", message: "Are you sure you want to close the app?", actions: [
+        {
+            label: 'No',
+            action: () => {
+                dialog.close();
+            }
+        },
+        {
+            label: 'Yes',
+            action: () => {
+                this.application.closeApp();
+            }
+        }
+    ]});
   }
-  
+
   $getDetailWidget() {
     return this.tag('Widgets.Detail');
   }

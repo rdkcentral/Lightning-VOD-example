@@ -3,6 +3,7 @@ import { Key as BaseKey } from '@lightningjs/ui';
 export class Key extends BaseKey {
     static _template() {
         return {
+            w: 0, h: 0,
             Focus: {
                 alpha: 0, mount: 0.5, x: w => w / 2, y: h => h /2, w: w => w + 10, h: h => h + 10, rect: true, colorBottom: Colors('focus2').get(), colorTop: Colors('focus').get(), shader: {type: Lightning.shaders.RoundedRectangle, stroke: 7, strokeColor: 0xffffffff, fillColor: 0x00ffffff, radius: 22, blend: 1}
             },
