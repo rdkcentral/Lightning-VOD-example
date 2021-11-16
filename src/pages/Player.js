@@ -16,10 +16,15 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Colors, Img, Lightning } from "@lightningjs/sdk";
-import { List } from "@lightningjs/ui";
-import { Page } from "../components";
-import { IconKey } from "../components/Key";
+import {
+  Colors,
+  Img,
+  Lightning,
+} from '@lightningjs/sdk';
+import { List } from '@lightningjs/ui';
+
+import { Page } from '../components';
+import { IconKey } from '../components/Key';
 
 export default class Player extends Page {
     static _template() {
@@ -50,9 +55,11 @@ export default class Player extends Page {
 
     pageTransition(pageIn, pageOut) {
         const widgets = pageIn.widgets;
+        //hide all widgets in app;
         for(let key in widgets) {
             widgets[key].setSmooth('alpha', 0, {delay: 0.0, duration: 0.2});
         }
+        //fire super
         return super.pageTransition(pageIn, pageOut);
     }
 
@@ -62,12 +69,16 @@ export default class Player extends Page {
     }
 
     _setup() {
+        //map player buttons
         const buttons = ['previous', 'play', 'next'].map((icon) => {
             return {type: IconKey, w: 110, h: 110, icon: `images/${icon}.png`, action: icon}
         });
 
+        //playerButtons list
         const playerButtons = this.tag('PlayerButtons')
+        //add mapped player buttons
         playerButtons.add(buttons);
+        //force playerButtons list index to 1
         playerButtons.index = 1;
 
         //use the animation functinality to fake playback replace the following events with player events
@@ -117,6 +128,8 @@ export default class Player extends Page {
         });
 
         const blackAlpha = Colors('black').alpha(0.3).get();
+
+        //create overlay hide animation
         this._hideControls = this.animation({duration: 0.2, stopMethod: 'reverse', actions: [
             {t: 'Top', p: 'alpha', v: {0: 1, 1: 0}},
             {t: 'Top', p: 'colorBottom', v: {0: blackAlpha, 1: 0x00000000}},
@@ -137,12 +150,15 @@ export default class Player extends Page {
     }
 
     _showOverlay() {
+        //show controls.
         this._hideControls.stop();
     }
 
     _startOverlayTimeout() {
         this._clearOverlayTimeout();
+        //create timeout for 3000 ms
         this._overlayTimeout = setTimeout(() => {
+            //if active and player is progressing (player is playing)
             if(this.active && this._progressAnimation.isActive()) {
                 this._hideControls.start();
                 this._showEventMessage(`hiding controls during playback`);
@@ -157,6 +173,7 @@ export default class Player extends Page {
     }
 
     _update() {
+        //if not active or no data dont update
         if(!this.active || !this._data) {
             return;
         }
@@ -168,6 +185,7 @@ export default class Player extends Page {
     }
 
     _updatePlayButton(toPlay = true) {
+        //update play pause buttong to play icon when toPlay is true.
         this.tag('PlayerButtons').items[1].icon = `images/${toPlay ? 'play' : 'pause'}.png`;
         if(!toPlay) {
             this._startOverlayTimeout();

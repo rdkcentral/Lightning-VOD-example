@@ -16,11 +16,15 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Router } from "@lightningjs/sdk";
-import keyboardConfig from "../lib/keyboardConfig.js";
-import { Page } from "../components";
-import { Grid, Keyboard } from "@lightningjs/ui";
-import { transition } from "../lib/helpers.js";
+import { Router } from '@lightningjs/sdk';
+import {
+  Grid,
+  Keyboard,
+} from '@lightningjs/ui';
+
+import { Page } from '../components';
+import { transition } from '../lib/helpers.js';
+import keyboardConfig from '../lib/keyboardConfig.js';
 
 export default class Search extends Page {
     static _template () {
@@ -31,39 +35,48 @@ export default class Search extends Page {
     }
 
     pageTransition(pageIn, pageOut) {
+        //hide menu widget
         pageIn.widgets.menu.setSmooth('alpha', 0, {delay: 0.0, duration: 0.2});
         const inputfield = pageIn.widgets.inputfield;
+        //show inputfield widget if not visible
         if(inputfield.alpha !== 1) {
             inputfield.visible = true;
             inputfield.alpha = 0.001;
             inputfield.setSmooth('alpha', 1, {delay: 0.2, duration: 0.2});
         }
+        //fire super
         return super.pageTransition(pageIn, pageOut);
     }
 
     onInputChanged({input}) {
+        //hide grid when input has changed
         const grid = this.tag('Content');
         grid.setSmooth('alpha', 0.001);
+
+        //if input length is 0 clear timeout else start search timeout
         if(input.length === 0) {
             this._clearSearchTimeout();
         }
         else {
             this._startSearchTimeout();
         }
+        //store input value to be used when search timeout is fired
         this._input = input;
     }
 
     _setup() {
+        //connect inputfield widget with keyboard
         this.tag('Keyboard').inputField(this.widgets.inputfield.input);
     }
 
     _firstActive() {
+        //when active for the first time focus keyboard
         this._setState('Keyboard')
-        this.tag('Keyboard').focus('onSpace');
     }
 
     _startSearchTimeout() {
         this._clearSearchTimeout();
+        //after 600 ms fire _doSearch
         this._searchTimeout = setTimeout(() => {
             this._doSearch();
         }, 600);
@@ -76,11 +89,14 @@ export default class Search extends Page {
     }
 
     _doSearch() {
+        //if onSearch exists and is a function, execute function and handle results
         if(this.onSearch && this.onSearch.apply && this.onSearch.call) {
             this.onSearch(this._input)
                 .then((response) => {
+                    //clear grid of current items
                     const grid = this.tag('Content');
                     grid.clear();
+                    //when response data length is bigger than 0 add them to grid
                     if(response.length > 0) {
                         grid.add(response);
                         grid.setSmooth('alpha', 1, {delay: 0.2});
