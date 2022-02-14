@@ -15,3 +15,6 @@ file, called LICENSE, which describes the licensing of the material in the Monts
 Roboto Regular font is:
 Copyright 2017 Google Inc. All Rights Reserved.
 Licensed under the Apache License, Version 2.0
+
+This component uses the TMDB API which is governed by the Terms of Use at https://www.themoviedb.org/documentation/api/terms-of-use.  The TMDB image "tmdb-logo.png" is used with permission (https://www.themoviedb.org/about/logos-attribution).
+
