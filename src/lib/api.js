@@ -25,7 +25,7 @@ const _headers = {
     'Content-Type': 'application/json;charset=utf-8'
 };
 const _params = {
-    'api_key': '66683917a94e703e14ca150023f4ea7c',
+    'api_key': process.env.APP_API_KEY,
     include_adult: false,
     include_video: true,
     region: 'NL'
@@ -34,6 +34,12 @@ const _params = {
 const _executeRequest = (config, retryCounter = 0) => {
     const {url, target, body, headers = {}, exceptions = {}, method, timeout} = config;
     return new Promise((resolve, reject) => {
+        if(_params.api_key === undefined) {
+            console.error('No APP_APID_KEY found check README.md for more information');
+            reject();
+            return;
+        }
+
         const xhr = new XMLHttpRequest();
         xhr.open(method, url, true);
         xhr.timeout = timeout || 10000;

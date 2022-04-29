@@ -15,9 +15,15 @@ npm install -g @lightningjs/cli
 
 1. Install the NPM dependencies by running `npm install`
 
-2. Build the App using the _Lightning-CLI_ by running `lng build` inside the root of your project
+2. Add yout api key from you got from TMDB to your .env file:
 
-3. Fire up a local webserver and open the App in a browser by running `lng serve` inside the root of your project
+```config
+APP_API_KEY=MYTMDBKEY1234
+```
+
+3. Build the App using the _Lightning-CLI_ by running `lng build` inside the root of your project
+
+4. Fire up a local webserver and open the App in a browser by running `lng serve` inside the root of your project
 
 #### Developing the App
 
